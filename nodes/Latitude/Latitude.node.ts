@@ -86,6 +86,15 @@ export class Latitude implements INodeType {
 					},
 				],
 			},
+
+			// Simplify output
+			{
+				displayName: 'Simplify Output',
+				name: 'simplify',
+				type: 'boolean',
+				default: true,
+				description: 'Whether to return only the response data (true) or full conversation history (false)',
+			},
 		],
 	};
 
@@ -175,11 +184,12 @@ export class Latitude implements INodeType {
 				const client = await getLatitudeClient.call(this);
 				this.logger.debug('Latitude SDK client initialized', { itemIndex: i });
 
-				// Get prompt path and parameters
+				// Get prompt path, parameters, and options
 				const promptPath = this.getNodeParameter('promptPath', i) as string;
 				const parametersUi = this.getNodeParameter('parametersUi', i) as {
 					parameter?: Array<{ name: string; value: string }>;
 				};
+				const simplify = this.getNodeParameter('simplify', i, true) as boolean;
 
 				this.logger.info('Running prompt', { itemIndex: i, promptPath });
 
@@ -213,8 +223,24 @@ export class Latitude implements INodeType {
 					hasResponse: !!result,
 				});
 
+				// Simplify output if requested
+				let outputData: any;
+				if (simplify && result) {
+					// Return just the essential response data
+					const response = result.response as any;
+					outputData = {
+						text: response?.text,
+						object: response?.object,
+						usage: response?.usage,
+						uuid: result.uuid,
+					};
+				} else {
+					// Return full conversation history
+					outputData = result || {};
+				}
+
 				returnData.push({
-					json: result || {},
+					json: outputData,
 					pairedItem: { item: i },
 				});
 			} catch (error) {

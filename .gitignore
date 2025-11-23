@@ -1,36 +1,35 @@
+# Dependencies
 node_modules/
 package-lock.json
 yarn.lock
 
 # Build output
-dist
-node_modules
+dist/
 
 # OS
 .DS_Store
-
-# Tests
-test
-junit.xml
+Thumbs.db
 
 # IDEs
-.idea
-.vscode
-
-# Prettier and linting
-.eslintcache
+.idea/
+.vscode/
+*.swp
+*.swo
 
 # Logs
 *.log
 npm-debug.log*
 
-# Lock files
-package-lock.json
-.env.local
-
 # Testing
 coverage/
 .nyc_output/
+test/
+
+# Environment
+.env
+.env.local
+
 # Temporary files
 *.tmp
 .cache/
+.eslintcache

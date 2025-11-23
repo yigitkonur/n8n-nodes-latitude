@@ -26,6 +26,7 @@ Or: `npm install n8n-nodes-latitude`
 
 - **Auto-loads prompts** from your Latitude project
 - **Dynamic parameters** - extracts `{{ variables }}` automatically
+- **Simplified output** - returns clean response data (toggle for full conversation)
 - **Type-safe** with full TypeScript support
 - **Secure** - encrypted credentials, sanitized logs
 - **n8n expressions** - use `{{$json.field}}` in values
@@ -56,15 +57,38 @@ Parameters:
 }
 ```
 
-## Fields
+## Configuration
 
 **Prompt Path**: Dropdown of available prompts (shows required parameters)  
-**Parameters**: Dynamic fields - Name (dropdown from prompt) + Value (string/expression)
+**Parameters**: Dynamic fields - Name (dropdown from prompt) + Value (string/expression)  
+**Simplify Output** (default: ON): Return clean data (`text`, `object`, `usage`, `uuid`) or full conversation history
+
+## Output
+
+**Simplified (default)**:
+```json
+{
+  "text": "{\"suggestions\":[...]}",
+  "object": {"suggestions": [...]},
+  "usage": {"inputTokens": 100, "outputTokens": 20, "totalTokens": 120},
+  "uuid": "conversation-id"
+}
+```
+
+**Full** (Simplify OFF):
+```json
+{
+  "uuid": "conversation-id",
+  "conversation": [...complete history...],
+  "response": {...}
+}
+```
 
 ## Tips
 
-- Use expressions: `{{$json.field}}`
+- Use expressions: `{{$json.field}}` or `{{$json.object.suggestions}}`
 - Enable "Continue On Fail" for non-critical flows
+- Simplify ON for production, OFF for debugging
 - Test prompts in Latitude before production use
 
 ## Troubleshooting
@@ -84,7 +108,10 @@ Parameters:
 
 ## Changelog
 
-**0.3.1** - Dynamic parameter fields, simplified single operation, security hardening  
+**0.4.0** - Simplified output option (clean response data vs full conversation)  
+**0.3.4** - Fixed prompt execution (was returning all prompts)  
+**0.3.2** - Code cleanup, optimized package size  
+**0.3.1** - Dynamic parameter fields, single operation focus  
 **0.2.2** - Fixed `{{ variable }}` extraction  
 **0.1.0** - Initial release
 

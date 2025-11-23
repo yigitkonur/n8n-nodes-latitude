@@ -175,7 +175,7 @@ export class Latitude implements INodeType {
 				const client = await getLatitudeClient.call(this);
 				this.logger.debug('Latitude SDK client initialized', { itemIndex: i });
 
-				// Run prompt with parameters
+				// Get prompt path and parameters
 				const promptPath = this.getNodeParameter('promptPath', i) as string;
 				const parametersUi = this.getNodeParameter('parametersUi', i) as {
 					parameter?: Array<{ name: string; value: string }>;
@@ -199,9 +199,12 @@ export class Latitude implements INodeType {
 					parameterCount: Object.keys(parameters).length,
 					parameterNames: Object.keys(parameters)
 				});
-				this.logger.info('Executing prompt with Latitude SDK', { itemIndex: i, promptPath });
 				
-				const result = await client.prompts.run(promptPath, { parameters });
+				// Run the prompt with stream: false (n8n compatibility)
+				const result = await client.prompts.run(promptPath, {
+					parameters,
+					stream: false,
+				});
 				
 				this.logger.info('Prompt executed successfully', {
 					itemIndex: i,
@@ -211,11 +214,7 @@ export class Latitude implements INodeType {
 				});
 
 				returnData.push({
-					json: {
-						promptPath,
-						parameters,
-						result: result || {},
-					},
+					json: result || {},
 					pairedItem: { item: i },
 				});
 			} catch (error) {

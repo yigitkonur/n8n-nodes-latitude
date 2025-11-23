@@ -1,0 +1,36 @@
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build output
+dist
+node_modules
+
+# OS
+.DS_Store
+
+# Tests
+test
+junit.xml
+
+# IDEs
+.idea
+.vscode
+
+# Prettier and linting
+.eslintcache
+
+# Logs
+*.log
+npm-debug.log*
+
+# Lock files
+package-lock.json
+.env.local
+
+# Testing
+coverage/
+.nyc_output/
+# Temporary files
+*.tmp
+.cache/

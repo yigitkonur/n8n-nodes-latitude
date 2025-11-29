@@ -10,6 +10,8 @@ index.ts
 gulpfile.js
 tsconfig.json
 tsconfig.tsbuildinfo
+dist/tsconfig.tsbuildinfo
+dist/package.json
 
 # Documentation (keep README and LICENSE)
 *.md

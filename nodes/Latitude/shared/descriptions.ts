@@ -46,7 +46,7 @@ export const parametersProperty: INodeProperties = {
 						loadOptionsDependsOn: ['promptPath'],
 					},
 					default: '',
-					description: 'Parameter name from prompt (auto-loads when prompt selected).',
+					description: 'Parameter name from prompt (auto-loads when prompt selected)',
 				},
 				{
 					displayName: 'Value',
@@ -70,8 +70,7 @@ export const simplifyProperty: INodeProperties = {
 	name: 'simplify',
 	type: 'boolean',
 	default: true,
-	description:
-		'Whether to return only the response data (true) or full conversation history (false).',
+	description: 'Whether to return only the response data (true) or full conversation history (false)',
 };
 
 /**

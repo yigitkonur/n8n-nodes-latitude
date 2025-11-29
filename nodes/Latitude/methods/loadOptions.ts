@@ -65,7 +65,7 @@ export async function getPromptParameters(
 				{
 					name: '(No Parameters Needed)',
 					value: '',
-					description: 'This prompt does not require parameters.',
+					description: 'This prompt does not require parameters',
 				},
 			];
 		}

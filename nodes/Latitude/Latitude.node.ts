@@ -22,7 +22,7 @@ export class Latitude implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Latitude',
 		name: 'latitude',
-		icon: 'file:latitude.svg',
+		icon: { light: 'file:latitude.svg', dark: 'file:latitude.svg' },
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["promptPath"]}}',

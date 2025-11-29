@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-latitude",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "n8n community node for Latitude.so - Execute AI prompts with dynamic parameters",
   "keywords": [
     "n8n-community-node-package",
@@ -33,8 +33,8 @@
     "build:watch": "tsc --watch",
     "dev": "tsc --watch",
     "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes/**/*.ts credentials/**/*.ts",
-    "lint:fix": "eslint nodes/**/*.ts credentials/**/*.ts --fix",
+    "lint": "eslint nodes credentials",
+    "lint:fix": "eslint nodes credentials --fix",
     "prepublishOnly": "npm run build && npm run lint"
   },
   "files": [
@@ -51,9 +51,10 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "eslint": "^8.56.0",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
     "eslint-plugin-n8n-nodes-base": "^1.16.0",
     "gulp": "^4.0.2",
     "prettier": "^3.0.0",

@@ -6,17 +6,18 @@ index.ts
 
 # Development files
 .prettierrc.js
-.eslintrc.js
+eslint.config.mjs
 gulpfile.js
 tsconfig.json
 tsconfig.tsbuildinfo
 dist/tsconfig.tsbuildinfo
 dist/package.json
 
-# Documentation (keep README and LICENSE)
+# Documentation (keep README, LICENSE, and CHANGELOG)
 *.md
 !README.md
 !LICENSE.md
+!CHANGELOG.md
 
 # IDE
 .vscode/

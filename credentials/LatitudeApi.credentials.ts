@@ -13,7 +13,10 @@ export class LatitudeApi implements ICredentialType {
 
 	documentationUrl = 'https://docs.latitude.so';
 
-	icon: Icon = 'file:icons/latitude.svg';
+	icon: Icon = {
+		light: 'file:icons/latitude.svg',
+		dark: 'file:icons/latitude.dark.svg',
+	};
 
 	properties: INodeProperties[] = [
 		{
@@ -23,7 +26,7 @@ export class LatitudeApi implements ICredentialType {
 			typeOptions: { password: true },
 			default: '',
 			required: true,
-			description: 'Your Latitude API key from the dashboard (Settings > API Keys).',
+			description: 'Your Latitude API key from the dashboard (Settings > API Keys)',
 			placeholder: 'lat_...',
 		},
 		{
@@ -32,7 +35,7 @@ export class LatitudeApi implements ICredentialType {
 			type: 'number',
 			default: 0,
 			required: true,
-			description: 'Your Latitude project ID (found in project settings).',
+			description: 'Your Latitude project ID (found in project settings)',
 			placeholder: '12345',
 		},
 	];

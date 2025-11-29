@@ -1,24 +1,23 @@
 import type { ILoadOptionsFunctions, INodePropertyOptions } from 'n8n-workflow';
 import {
-	getCredentials,
+	getLatitudeClient,
 	extractPromptParameters,
 	formatParameterList,
+	extractLatitudeApiError,
 } from '../shared';
 
 /**
  * Fetches all prompts from the Latitude project for dropdown selection
+ * Uses SDK's prompts.getAll() method
+ * @see https://docs.latitude.so - Get All Prompts section
  */
 export async function getPrompts(
 	this: ILoadOptionsFunctions,
 ): Promise<INodePropertyOptions[]> {
-	const credentials = await getCredentials(this);
-
 	try {
-		const { Latitude } = await import('@latitude-data/sdk');
-		const client = new Latitude(credentials.apiKey, {
-			projectId: credentials.projectId,
-		});
+		const client = await getLatitudeClient.call(this);
 
+		// SDK method: client.prompts.getAll()
 		const prompts = await client.prompts.getAll();
 
 		return prompts.map((prompt: { path: string; content: string }) => {
@@ -31,14 +30,16 @@ export async function getPrompts(
 			};
 		});
 	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : 'Failed to load prompts';
-		throw new Error(`Error loading prompts: ${errorMessage}`);
+		const errorDetails = extractLatitudeApiError(error);
+		throw new Error(`Error loading prompts: ${errorDetails.message}`);
 	}
 }
 
 /**
  * Fetches parameters for a specific prompt
+ * Uses SDK's prompts.get() method to retrieve prompt content
  * Depends on promptPath selection
+ * @see https://docs.latitude.so - Get a Prompt section
  */
 export async function getPromptParameters(
 	this: ILoadOptionsFunctions,
@@ -49,14 +50,10 @@ export async function getPromptParameters(
 		return [];
 	}
 
-	const credentials = await getCredentials(this);
-
 	try {
-		const { Latitude } = await import('@latitude-data/sdk');
-		const client = new Latitude(credentials.apiKey, {
-			projectId: credentials.projectId,
-		});
+		const client = await getLatitudeClient.call(this);
 
+		// SDK method: client.prompts.get(path)
 		const prompt = await client.prompts.get(promptPath);
 		const parameters = extractPromptParameters(prompt.content);
 
@@ -76,7 +73,7 @@ export async function getPromptParameters(
 			description: `Parameter: {{ ${param} }}`,
 		}));
 	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : 'Failed to load parameters';
-		throw new Error(`Error loading prompt parameters: ${errorMessage}`);
+		const errorDetails = extractLatitudeApiError(error);
+		throw new Error(`Error loading prompt parameters: ${errorDetails.message}`);
 	}
 }

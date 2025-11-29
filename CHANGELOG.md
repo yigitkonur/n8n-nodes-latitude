@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2024-11-29
+
+### Added
+- **Custom Identifier** option - Tag runs for tracking in Latitude dashboard
+- **Version UUID** option - Use specific project version instead of live
+- **Cost tracking** - Returns `cost` in USD when available from API
+- **Tool calls visibility** - Returns `toolCalls` array when prompts use tools
+- **Improved error handling** - Extracts `LatitudeApiError` details (errorCode, status)
+- SDK documentation references throughout codebase (@see comments)
+
+### Changed
+- Aligned types exactly with Latitude API response structure
+- Token usage now uses API field names: `promptTokens`, `completionTokens`, `totalTokens`
+- `simplifyOutput()` now includes `customIdentifier`, `cost`, and `toolCalls` when present
+- Refactored `loadOptions` to use shared `getLatitudeClient` helper
+- Enhanced logging with conversation UUID and option flags
+- Error output now includes `errorCode` and `status` from SDK
+
+### Technical
+- Added `ILatitudeRunOptions` type matching SDK interface
+- Added `ITokenUsage` with API field names (promptTokens/completionTokens)
+- Added `IToolCall` type for tool call responses
+- Added `IConversationMessage`, `ILatitudeApiErrorDetails` types
+- Added `extractLatitudeApiError()` utility for SDK error extraction
+- Improved API key sanitization regex to catch `lat_xxx` format
+- Types now include `streamType`, `cost`, `toolCalls` per API spec
+
 ## [0.6.1] - 2024-11-29
 
 ### Changed

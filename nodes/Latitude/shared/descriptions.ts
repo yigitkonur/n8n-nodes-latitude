@@ -2,6 +2,7 @@ import type { INodeProperties } from 'n8n-workflow';
 
 /**
  * Prompt path selection property with dynamic loading
+ * @see https://docs.latitude.so - Prompt Management
  */
 export const promptPathProperty: INodeProperties = {
 	displayName: 'Prompt Path',
@@ -19,6 +20,7 @@ export const promptPathProperty: INodeProperties = {
 
 /**
  * Dynamic parameters collection property
+ * Maps to SDK's parameters option in prompts.run()
  */
 export const parametersProperty: INodeProperties = {
 	displayName: 'Parameters',
@@ -74,10 +76,43 @@ export const simplifyProperty: INodeProperties = {
 };
 
 /**
+ * Additional options collection for advanced SDK features
+ * @see https://docs.latitude.so - Running Prompts section
+ */
+export const additionalOptionsProperty: INodeProperties = {
+	displayName: 'Options',
+	name: 'options',
+	type: 'collection',
+	placeholder: 'Add Option',
+	default: {},
+	options: [
+		{
+			displayName: 'Custom Identifier',
+			name: 'customIdentifier',
+			type: 'string',
+			default: '',
+			placeholder: 'e.g., order-123, user-456',
+			description:
+				'Tag this run with a custom identifier for filtering and analysis in the Latitude dashboard',
+		},
+		{
+			displayName: 'Version UUID',
+			name: 'versionUuid',
+			type: 'string',
+			default: '',
+			placeholder: 'e.g., abc123-def456',
+			description:
+				'Use a specific project version instead of live. Leave empty to use the live version.',
+		},
+	],
+};
+
+/**
  * All properties for the Latitude node
  */
 export const latitudeProperties: INodeProperties[] = [
 	promptPathProperty,
 	parametersProperty,
 	simplifyProperty,
+	additionalOptionsProperty,
 ];

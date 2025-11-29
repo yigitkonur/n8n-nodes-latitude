@@ -33,3 +33,7 @@ test/
 *.tmp
 .cache/
 .eslintcache
+
+# SDK reference docs (not needed in repo)
+latitude-sdk.md
+latitude-llm/

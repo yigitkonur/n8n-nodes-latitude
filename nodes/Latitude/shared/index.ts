@@ -2,8 +2,13 @@
 export type {
 	ILatitudeCredentials,
 	IParametersUi,
+	ILatitudeRunOptions,
+	ITokenUsage,
+	IToolCall,
 	ISimplifiedOutput,
 	IPromptRunResult,
+	IConversationMessage,
+	ILatitudeApiErrorDetails,
 	LatitudeReturnData,
 } from './types';
 
@@ -16,6 +21,7 @@ export {
 	parseParametersUi,
 	simplifyOutput,
 	sanitizeErrorMessage,
+	extractLatitudeApiError,
 	formatParameterList,
 } from './utils';
 
@@ -24,5 +30,6 @@ export {
 	promptPathProperty,
 	parametersProperty,
 	simplifyProperty,
+	additionalOptionsProperty,
 	latitudeProperties,
 } from './descriptions';

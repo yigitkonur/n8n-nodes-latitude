@@ -68,7 +68,7 @@ export class LatitudeApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: '={{$credentials.gatewayUrl || "https://gateway.latitude.so"}}/api/v2',
+			baseURL: '={{$credentials.gatewayUrl || "https://gateway.latitude.so"}}/api/v3',
 			url: '=/projects/{{$credentials.projectId}}/versions/live/documents',
 			method: 'GET',
 		},

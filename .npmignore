@@ -1,6 +1,7 @@
 # Source files
 credentials/**/*.ts
 nodes/**/*.ts
+index.ts
 !dist/**/*.js
 
 # Development files
@@ -8,10 +9,12 @@ nodes/**/*.ts
 .eslintrc.js
 gulpfile.js
 tsconfig.json
+tsconfig.tsbuildinfo
 
-# Documentation
+# Documentation (keep README and LICENSE)
 *.md
 !README.md
+!LICENSE.md
 
 # IDE
 .vscode/
@@ -31,3 +34,6 @@ tests/
 # Git
 .git/
 .gitignore
+
+# Icons source (dist has copies)
+icons/

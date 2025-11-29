@@ -1,120 +1,150 @@
 # n8n-nodes-latitude
 
-[![npm](https://img.shields.io/npm/v/n8n-nodes-latitude)](https://www.npmjs.com/package/n8n-nodes-latitude)
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-latitude.svg)](https://www.npmjs.com/package/n8n-nodes-latitude)
+[![npm downloads](https://img.shields.io/npm/dm/n8n-nodes-latitude.svg)](https://www.npmjs.com/package/n8n-nodes-latitude)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![n8n community](https://img.shields.io/badge/n8n-community%20node-ff6d5a)](https://n8n.io)
 
-An n8n community node for executing AI prompts from [Latitude.so](https://latitude.so) with automatic parameter detection.
+This is an n8n community node for [Latitude.so](https://latitude.so) - the AI prompt management platform. Execute AI prompts with automatic parameter detection directly from your n8n workflows.
 
-**Why this matters**: Manage your AI prompts centrally in Latitude instead of hardcoding them in workflows. Change prompts on the fly without touching your workflow - just update in Latitude and the node picks it up. Dynamic parameter fields save you from wrestling with JSON - add params as they're defined in your prompt.
+[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
-[n8n](https://n8n.io/) | [Latitude Docs](https://docs.latitude.so) | [GitHub](https://github.com/yigitkonur/n8n-nodes-latitude)  
+## Why Use This Node?
+
+- **Centralized Prompt Management**: Manage your AI prompts in Latitude instead of hardcoding them in workflows
+- **Hot Reload**: Change prompts on the fly without modifying your workflow
+- **Dynamic Parameters**: Automatically detects `{{ variables }}` from your prompts - no JSON wrestling
+- **AI Agent Compatible**: Works as a tool for n8n AI agents (`usableAsTool: true`)
 
 ## Installation
 
-In n8n: **Settings** > **Community Nodes** > Install `n8n-nodes-latitude`
+### Community Nodes (Recommended)
 
-Or: `npm install n8n-nodes-latitude`
+1. Go to **Settings** > **Community Nodes**
+2. Select **Install**
+3. Enter `n8n-nodes-latitude` and confirm
 
-## Quick Start
+### Manual Installation
 
-1. Add Latitude node to workflow
-2. Configure credentials (API Key + Project ID from Latitude dashboard)
-3. Select prompt from dropdown
-4. Add parameters (auto-loaded from prompt)
-5. Execute
-
-## Features
-
-- **Auto-loads prompts** from your Latitude project
-- **Dynamic parameters** - extracts `{{ variables }}` automatically
-- **Simplified output** - returns clean response data (toggle for full conversation)
-- **Type-safe** with full TypeScript support
-- **Secure** - encrypted credentials, sanitized logs
-- **n8n expressions** - use `{{$json.field}}` in values
+```bash
+npm install n8n-nodes-latitude
+```
 
 ## Credentials
 
-Get from [Latitude Dashboard](https://latitude.so):
-- **API Key**: Settings > API Keys (format: `lat_...`)
-- **Project ID**: Project Settings (numeric, e.g., `12345`)
+You need a Latitude.so account with API access.
 
-## Usage Example
+| Field | Description | Where to Find |
+|-------|-------------|---------------|
+| **API Key** | Your Latitude API key | Dashboard → Settings → API Keys (format: `lat_...`) |
+| **Project ID** | Numeric project identifier | Dashboard → Project Settings |
 
-**Workflow**: Webhook → Latitude → Gmail
+## Operations
+
+### Run Prompt
+
+Execute an AI prompt from your Latitude project.
+
+| Parameter | Description |
+|-----------|-------------|
+| **Prompt Path** | Select from dropdown - shows all prompts with their required parameters |
+| **Parameters** | Dynamic fields that load based on selected prompt. Map values to `{{ variables }}` |
+| **Simplify Output** | Return only essential data (text, usage, uuid) or full conversation history |
+
+## Usage Examples
+
+### Basic Workflow
+
+```
+Webhook → Latitude → Respond to Webhook
+```
+
+### Configuration
 
 ```javascript
-// Latitude Node Config
-Prompt: "marketing/personalized-email"
+// Latitude Node Settings
+Prompt Path: "marketing/personalized-email"
 Parameters:
   - customer_name: {{$json.name}}
   - product: {{$json.product}}
   - tone: "professional"
-
-// Output
-{
-  "promptPath": "marketing/personalized-email",
-  "parameters": {...},
-  "result": { "text": "Hi John, ...", "usage": {...} }
-}
 ```
 
-## Configuration
+### Output (Simplified)
 
-**Prompt Path**: Dropdown of available prompts (shows required parameters)  
-**Parameters**: Dynamic fields - Name (dropdown from prompt) + Value (string/expression)  
-**Simplify Output** (default: ON): Return clean data (`text`, `object`, `usage`, `uuid`) or full conversation history
-
-## Output
-
-**Simplified (default)**:
 ```json
 {
-  "text": "{\"suggestions\":[...]}",
-  "object": {"suggestions": [...]},
-  "usage": {"inputTokens": 100, "outputTokens": 20, "totalTokens": 120},
-  "uuid": "conversation-id"
+  "text": "Dear John, thank you for your interest in...",
+  "object": null,
+  "usage": {
+    "inputTokens": 150,
+    "outputTokens": 200,
+    "totalTokens": 350
+  },
+  "uuid": "conv_abc123"
 }
 ```
 
-**Full** (Simplify OFF):
+### Output (Full)
+
 ```json
 {
-  "uuid": "conversation-id",
-  "conversation": [...complete history...],
-  "response": {...}
+  "uuid": "conv_abc123",
+  "conversation": [...],
+  "response": {
+    "text": "...",
+    "usage": {...}
+  }
 }
 ```
 
-## Tips
+## Features
 
-- Use expressions: `{{$json.field}}` or `{{$json.object.suggestions}}`
-- Enable "Continue On Fail" for non-critical flows
-- Simplify ON for production, OFF for debugging
-- Test prompts in Latitude before production use
+- **Auto-loads prompts** from your Latitude project via dropdown
+- **Dynamic parameters** - extracts `{{ variables }}` from selected prompt automatically
+- **Simplified output** - toggle between clean response data or full conversation history
+- **AI Agent support** - use as a tool in n8n AI workflows
+- **Secure** - credentials encrypted, error messages sanitized
+- **n8n expressions** - use `{{$json.field}}` in parameter values
+- **Continue On Fail** - handle errors gracefully in workflows
+
+## Compatibility
+
+- **n8n version**: 1.0.0+
+- **Node.js version**: 18.0.0+
+
+## Resources
+
+- [Latitude Documentation](https://docs.latitude.so)
+- [Latitude API Reference](https://docs.latitude.so/guides/getting-started/api-access)
+- [n8n Community Nodes Documentation](https://docs.n8n.io/integrations/community-nodes/)
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| Authentication failed | Verify API key & Project ID in Latitude dashboard |
-| Prompt not found | Refresh dropdown or check prompt exists |
-| Parameters not loading | Test credentials, check network connectivity |
+| Authentication failed | Verify API key format (`lat_...`) and Project ID in Latitude dashboard |
+| Prompt not found | Refresh the dropdown or verify the prompt exists in your project |
+| Parameters not loading | Check credentials are valid, test connectivity |
+| Empty response | Ensure prompt is published and not in draft mode |
 
-## Links
+## Contributing
 
-- [Latitude Docs](https://docs.latitude.so)
-- [n8n Docs](https://docs.n8n.io)
-- [GitHub](https://github.com/yigitkonur/n8n-nodes-latitude)
-- [npm](https://www.npmjs.com/package/n8n-nodes-latitude)
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Changelog
-
-**0.4.0** - Simplified output option (clean response data vs full conversation)  
-**0.3.4** - Fixed prompt execution (was returning all prompts)  
-**0.3.2** - Code cleanup, optimized package size  
-**0.3.1** - Dynamic parameter fields, single operation focus  
-**0.2.2** - Fixed `{{ variable }}` extraction  
-**0.1.0** - Initial release
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT - Yigit Konur (yigit35@gmail.com)
+[MIT](LICENSE.md) - Yigit Konur (yigit35@gmail.com)
+
+## Links
+
+- [GitHub Repository](https://github.com/yigitkonur/n8n-nodes-latitude)
+- [npm Package](https://www.npmjs.com/package/n8n-nodes-latitude)
+- [Latitude.so](https://latitude.so)
+- [n8n.io](https://n8n.io)

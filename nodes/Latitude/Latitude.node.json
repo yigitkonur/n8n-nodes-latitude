@@ -1,0 +1,19 @@
+{
+	"node": "n8n-nodes-latitude.latitude",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["AI", "Developer Tools"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://docs.latitude.so/guides/getting-started/api-access"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/yigitkonur/n8n-nodes-latitude"
+			}
+		]
+	},
+	"alias": ["AI", "LLM", "Prompt", "Latitude"]
+}

@@ -6,7 +6,7 @@ import type {
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
-import { NodeOperationError } from 'n8n-workflow';
+import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 import { getLatitudeClient, extractPromptParameters } from './GenericFunctions';
 
@@ -22,8 +22,9 @@ export class Latitude implements INodeType {
 		defaults: {
 			name: 'Latitude',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		usableAsTool: true,
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'latitudeApi',
@@ -37,6 +38,7 @@ export class Latitude implements INodeType {
 				name: 'promptPath',
 				type: 'options',
 				required: true,
+				noDataExpression: true,
 				typeOptions: {
 					loadOptionsMethod: 'getPrompts',
 				},
@@ -55,7 +57,7 @@ export class Latitude implements INodeType {
 					multipleValues: true,
 				},
 				default: {},
-				description: 'Map values to prompt variables (e.g., {{ query }}). Parameter names load from selected prompt.',
+				description: 'Map values to prompt variables (e.g., {{ query }}). Parameter names load from the selected prompt.',
 				options: [
 					{
 						name: 'parameter',
@@ -71,7 +73,7 @@ export class Latitude implements INodeType {
 									loadOptionsDependsOn: ['promptPath'],
 								},
 								default: '',
-								description: 'Parameter name from prompt (auto-loads when prompt selected)',
+								description: 'Parameter name from prompt (auto-loads when prompt selected).',
 							},
 							{
 								displayName: 'Value',
@@ -93,7 +95,7 @@ export class Latitude implements INodeType {
 				name: 'simplify',
 				type: 'boolean',
 				default: true,
-				description: 'Whether to return only the response data (true) or full conversation history (false)',
+				description: 'Whether to return only the response data (true) or full conversation history (false).',
 			},
 		],
 	};

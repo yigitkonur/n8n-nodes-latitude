@@ -1,10 +1,13 @@
 import type {
-	IParametersUi,
-	ISimplifiedOutput,
-	IPromptRunResult,
-	ILatitudeApiErrorDetails,
-	ITokenUsage,
-	IToolCall,
+	ParametersUi,
+	SimplifiedOutput,
+	PromptRunResult,
+	LatitudeApiErrorDetails,
+	TokenUsage,
+	ToolCall,
+	MessagesUi,
+	ConversationMessage,
+	MessageContent,
 } from './types';
 
 /**
@@ -44,7 +47,7 @@ export function extractPromptParameters(promptContent: string): string[] {
  * @param parametersUi - The UI parameters from n8n fixedCollection
  * @returns Record of parameter name to value
  */
-export function parseParametersUi(parametersUi: IParametersUi): Record<string, unknown> {
+export function parseParametersUi(parametersUi: ParametersUi): Record<string, unknown> {
 	const parameters: Record<string, unknown> = {};
 
 	if (!parametersUi.parameter || !Array.isArray(parametersUi.parameter)) {
@@ -65,7 +68,7 @@ export function parseParametersUi(parametersUi: IParametersUi): Record<string, u
  * Default token usage when not provided by SDK
  * Uses API field names: promptTokens, completionTokens, totalTokens
  */
-const DEFAULT_USAGE: ITokenUsage = {
+const DEFAULT_USAGE: TokenUsage = {
 	promptTokens: 0,
 	completionTokens: 0,
 	totalTokens: 0,
@@ -80,13 +83,13 @@ const DEFAULT_USAGE: ITokenUsage = {
  * @see https://docs.latitude.so/guides/api/api-access - Run a Document section
  */
 export function simplifyOutput(
-	result: IPromptRunResult,
+	result: PromptRunResult,
 	customIdentifier?: string,
-): ISimplifiedOutput {
+): SimplifiedOutput {
 	const response = result.response;
-	const usage = (response?.usage as ITokenUsage) ?? DEFAULT_USAGE;
+	const usage = (response?.usage as TokenUsage) ?? DEFAULT_USAGE;
 
-	const output: ISimplifiedOutput = {
+	const output: SimplifiedOutput = {
 		uuid: result.uuid,
 		text: response?.text ?? null,
 		object: response?.object ?? null,
@@ -104,7 +107,7 @@ export function simplifyOutput(
 
 	// Include tool calls if any were made
 	if (response?.toolCalls && response.toolCalls.length > 0) {
-		output.toolCalls = response.toolCalls as IToolCall[];
+		output.toolCalls = response.toolCalls as ToolCall[];
 	}
 
 	// Include customIdentifier if it was provided
@@ -132,7 +135,7 @@ export function sanitizeErrorMessage(message: string): string {
  * @returns Structured error details
  * @see https://docs.latitude.so - Error Handling section
  */
-export function extractLatitudeApiError(error: unknown): ILatitudeApiErrorDetails {
+export function extractLatitudeApiError(error: unknown): LatitudeApiErrorDetails {
 	// Check if it's a LatitudeApiError (has errorCode and status)
 	if (error && typeof error === 'object') {
 		const apiError = error as Record<string, unknown>;
@@ -169,4 +172,38 @@ export function formatParameterList(parameters: string[]): string {
 	}
 
 	return `Required: ${parameters.map((p) => `{{ ${p} }}`).join(', ')}`;
+}
+
+/**
+ * Parses messages UI format to SDK-compatible message array
+ * Converts n8n fixedCollection format to PromptL message format
+ * @param messagesUi - The UI messages from n8n fixedCollection
+ * @returns Array of conversation messages in PromptL format
+ * @see https://docs.latitude.so/promptl/syntax/messages
+ */
+export function parseMessagesUi(messagesUi: MessagesUi): ConversationMessage[] {
+	if (!messagesUi.message || !Array.isArray(messagesUi.message)) {
+		return [];
+	}
+
+	return messagesUi.message
+		.filter((msg) => msg.content && msg.content.trim() !== '')
+		.map((msg) => ({
+			role: msg.role,
+			content: [{ type: 'text' as const, text: msg.content.trim() }] as MessageContent[],
+		}));
+}
+
+/**
+ * Formats messages for log creation (simplified text format)
+ * @param messages - Array of conversation messages
+ * @returns Array of messages in simplified format for logs.create()
+ */
+export function formatMessagesForLog(
+	messages: Array<{ role: string; content: string }>,
+): ConversationMessage[] {
+	return messages.map((msg) => ({
+		role: msg.role as ConversationMessage['role'],
+		content: [{ type: 'text' as const, text: msg.content }] as MessageContent[],
+	}));
 }

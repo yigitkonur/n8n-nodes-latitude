@@ -4,19 +4,19 @@ import type {
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
-import { NodeConnectionTypes } from 'n8n-workflow';
+import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 import { latitudeProperties } from './shared';
 import { loadOptions } from './methods';
-import { runPrompt } from './actions';
+import { runPrompt, chat, createLog } from './actions';
 
 /**
  * Latitude Node
  *
- * Execute AI prompts from Latitude.so with dynamic parameters.
- * Supports automatic parameter detection from prompt content.
+ * Execute AI prompts and manage logs with the Latitude.so platform.
+ * Supports running prompts, continuing conversations, and creating logs.
  *
- * @see https://docs.latitude.so
+ * @see https://docs.latitude.so/guides/sdk/typescript
  */
 export class Latitude implements INodeType {
 	description: INodeTypeDescription = {
@@ -25,8 +25,10 @@ export class Latitude implements INodeType {
 		icon: { light: 'file:latitude.svg', dark: 'file:latitude.svg' },
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["promptPath"]}}',
-		description: 'Execute AI prompts from Latitude.so with dynamic parameters.',
+		subtitle:
+			'={{$parameter["resource"] === "prompt" ? ($parameter["operation"] === "run" ? $parameter["promptPath"] : "Chat: " + $parameter["conversationUuid"]) : "Log: " + $parameter["promptPath"]}}',
+		description:
+			'Execute AI prompts and manage logs with the Latitude.so platform. Run prompts, chat, and create logs.',
 		defaults: {
 			name: 'Latitude',
 		},
@@ -45,6 +47,31 @@ export class Latitude implements INodeType {
 	methods = { loadOptions };
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-		return runPrompt.call(this);
+		const resource = this.getNodeParameter('resource', 0) as string;
+		const operation = this.getNodeParameter('operation', 0) as string;
+
+		this.logger.info('Latitude node executing', { resource, operation });
+
+		// Dispatch to appropriate operation handler
+		if (resource === 'prompt') {
+			if (operation === 'run') {
+				return runPrompt.call(this);
+			}
+			if (operation === 'chat') {
+				return chat.call(this);
+			}
+		}
+
+		if (resource === 'log') {
+			if (operation === 'create') {
+				return createLog.call(this);
+			}
+		}
+
+		// Should never reach here if UI is configured correctly
+		throw new NodeOperationError(
+			this.getNode(),
+			`Unknown resource "${resource}" or operation "${operation}"`,
+		);
 	}
 }

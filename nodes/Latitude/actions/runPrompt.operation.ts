@@ -1,6 +1,6 @@
 import type { IDataObject, IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
-import type { IParametersUi, IPromptRunResult, ILatitudeRunOptions } from '../shared';
+import type { ParametersUi, PromptRunResult, LatitudeRunOptions } from '../shared';
 import {
 	getLatitudeClient,
 	parseParametersUi,
@@ -16,14 +16,14 @@ function getRunOptions(
 	context: IExecuteFunctions,
 	itemIndex: number,
 	parameters: Record<string, unknown>,
-): ILatitudeRunOptions {
+): LatitudeRunOptions {
 	// Get additional options
 	const options = context.getNodeParameter('options', itemIndex, {}) as {
 		customIdentifier?: string;
 		versionUuid?: string;
 	};
 
-	const runOptions: ILatitudeRunOptions = {
+	const runOptions: LatitudeRunOptions = {
 		parameters,
 		stream: false, // n8n doesn't support streaming responses
 	};
@@ -54,7 +54,7 @@ async function executePromptRun(
 
 	// Get node parameters
 	const promptPath = context.getNodeParameter('promptPath', itemIndex) as string;
-	const parametersUi = context.getNodeParameter('parametersUi', itemIndex) as IParametersUi;
+	const parametersUi = context.getNodeParameter('parametersUi', itemIndex) as ParametersUi;
 	const simplify = context.getNodeParameter('simplify', itemIndex, true) as boolean;
 
 	// Parse parameters from UI format
@@ -76,7 +76,7 @@ async function executePromptRun(
 	const sdkResult = await client.prompts.run(promptPath, runOptions);
 
 	// Cast SDK result to our interface (SDK returns GenerationResponse)
-	const result = sdkResult as unknown as IPromptRunResult;
+	const result = sdkResult as unknown as PromptRunResult;
 
 	context.logger.info('Latitude prompt executed successfully', {
 		itemIndex,

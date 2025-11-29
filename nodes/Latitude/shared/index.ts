@@ -4,51 +4,27 @@ export type {
 	ParametersUi,
 	MessagesUi,
 	LatitudeRunOptions,
-	LatitudeChatOptions,
-	LatitudeLogOptions,
 	TokenUsage,
 	ToolCall,
 	SimplifiedOutput,
 	PromptRunResult,
-	ChatResult,
 	LogResult,
-	MessageContent,
 	ConversationMessage,
 	LatitudeApiErrorDetails,
-	LatitudeReturnData,
-	LatitudeResource,
-	PromptOperation,
-	LogOperation,
 } from './types';
 
-// Transport (SDK client)
-export { getLatitudeClient, getCredentials } from './transport';
+// SDK client
+export { getLatitudeClient } from './transport';
 
 // Utilities
 export {
 	extractPromptParameters,
 	parseParametersUi,
 	parseMessagesUi,
-	formatMessagesForLog,
 	simplifyOutput,
-	sanitizeErrorMessage,
 	extractLatitudeApiError,
 	formatParameterList,
 } from './utils';
 
-// Property descriptions
-export {
-	resourceProperty,
-	promptOperationProperty,
-	promptPathProperty,
-	conversationUuidProperty,
-	chatMessagesProperty,
-	parametersProperty,
-	simplifyProperty,
-	promptOptionsProperty,
-	logOperationProperty,
-	logPromptPathProperty,
-	logMessagesProperty,
-	logResponseProperty,
-	latitudeProperties,
-} from './descriptions';
+// Properties
+export { latitudeProperties } from './descriptions';

@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2024-11-29
+
+### Changed
+- **Major refactor**: Split monolithic node into modular structure following n8n best practices
+- New directory structure:
+  - `shared/` - Types, utilities, transport, and property descriptions
+  - `methods/` - loadOptions methods for dynamic dropdowns
+  - `actions/` - Operation implementations
+- Main node file reduced from 287 lines to 51 lines
+- Improved type safety with dedicated type definitions
+- Better separation of concerns for maintainability
+- Added JSDoc documentation throughout
+
+### Technical
+- Created `shared/types.ts` - All TypeScript interfaces
+- Created `shared/utils.ts` - Utility functions (parameter extraction, sanitization)
+- Created `shared/transport.ts` - SDK client initialization
+- Created `shared/descriptions.ts` - Node property definitions
+- Created `methods/loadOptions.ts` - Dynamic dropdown methods
+- Created `actions/runPrompt.operation.ts` - Prompt execution logic
+- Removed legacy `GenericFunctions.ts`
+
 ## [0.5.0] - 2024-11-29
 
 ### Added

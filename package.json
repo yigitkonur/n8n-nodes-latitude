@@ -35,7 +35,7 @@
     "format": "prettier nodes credentials --write",
     "lint": "eslint nodes credentials",
     "lint:fix": "eslint nodes credentials --fix",
-    "prepublishOnly": "npm run build && npm run lint"
+    "prepublishOnly": "pnpm build && pnpm lint"
   },
   "files": [
     "dist"

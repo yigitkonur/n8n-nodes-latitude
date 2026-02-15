@@ -131,7 +131,7 @@ For self-hosted n8n or custom setups:
 cd ~/.n8n/nodes
 
 # Install the package
-npm install n8n-nodes-latitude
+pnpm add n8n-nodes-latitude
 
 # Restart n8n
 ```
@@ -371,17 +371,16 @@ git clone https://github.com/yigitkonur/n8n-nodes-latitude.git
 cd n8n-nodes-latitude
 
 # Install dependencies
-npm install
-
+pnpm install
 # Development mode (watch for changes)
-npm run dev
+pnpm dev
 
 # Build for production
-npm run build
+pnpm build
 
 # Lint and format
-npm run lint:fix
-npm run format
+pnpm lint:fix
+pnpm format
 ```
 
 ### Project Structure
